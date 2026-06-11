@@ -13,7 +13,7 @@ from googleapiclient.discovery import build
 
 SCOPES_CALENDAR = ['https://www.googleapis.com/auth/calendar']
 SCOPES_GMAIL = ['https://www.googleapis.com/auth/gmail.send']
-USER_EMAIL = 'martin.turra@netposible.com'
+USER_EMAIL = 'admin@netposible.com'
 CREDS_FILE = '/root/.hermes/config/google-credentials.json'
 
 
