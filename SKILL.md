@@ -1229,11 +1229,11 @@ Los emails están en el **nombre** de la tarjeta, formato:
 - Tarjetas que empiezan con `TOTAL VEHÍCULOS:` se ignoran (no son leads)
 - Si no hay email con `@` en la tarjeta, se跳过
 
-### 27.6 Bloqueo n8n
+### 27.6 Nota sobre bloqueo n8n
 
-**Sheet:** `1JcsHW3_6cwNlnm_arJslmMuND2GWq_0mAn6z7mjU8wg` (CSV export con follow-redirect)
+**La sheet n8n (`1JcsHW3_6cwNlnm_arJslmMuND2GWq_0mAn6z7mjU8wg`) NO se usa en este cron.**
 
-Antes de enviar, el script verifica si el teléfono del lead aparece en la sheet de bloqueo. Si está bloqueado, **no se envía email**.
+Esa sheet era solo para el sistema de `/pause`/`/resume` en chat en vivo (sección 13.3). El cron de email envía a **todos** los leads de las listas sin filtro de bloqueo.
 
 ### 27.7 Email enviado
 
@@ -1246,8 +1246,7 @@ Antes de enviar, el script verifica si el teléfono del lead aparece en la sheet
 | Métrica | Valor |
 |---------|-------|
 | Leads procesados | ~31 |
-| Emails enviados | ~9 |
-| Bloqueados por n8n | ~5 |
+| Emails enviados (test) | 9 |
 | Errors (encoding ñ) | 1 |
 
 ### 27.9 Cron configurado

@@ -79,28 +79,25 @@ def parse_card_name(name):
 
     return {"nombre": nombre, "telefono": telefono_limpio, "email": email}
 
-def enviar_email(to_email, nombre, lista_origen):
+def enviar_email(to_email, nombre):
     """Envía email de cierre via send_message."""
-    asunto = f"📋 Seguimiento FollowApp — {nombre}"
+    asunto = "¿Sabías que podés saber dónde están tus vehículos ahora?"
 
     cuerpo = f"""Hola {nombre},
 
-Te contacto de parte de FollowApp. Hace un tiempo charlamos sobre el monitoreo de tus vehículos y quiero saber cómo venís con esa decisión.
+Te voy a ser directo: sé que tenés vehículos y probablemente no sabés bien dónde está cada uno en este momento.
 
-Sabemos que son temas que llevan tiempo evaluar, pero quiero que sepas que estamos disponibles para darte una mano:
+Con FollowApp resolvés eso en 5 minutos:
+- Sabés la ubicación de todos tus vehículos en tiempo real
+- Te llega una alerta si algo se mueve fuera de horario
+- Lo armamos juntos y queda funcionando
 
-• Te mostramos cómo funciona en 5 minutos
-• Te ayudamos a armarlo con tus vehículos
-• No hay compromiso de tu parte
+Si ya lo resolviste con otro sistema, ignorá este mensaje.
+Si todavía lo estás pensando, te ofrezco una llamada de 5 minutos y te muestro.
 
-¿Lo estás pensando todavía o ya lo dejaste de lado? Necesito saber para no molestarte más si ya no aplica.
+¿Hablamos?
 
-¡Abrazo!
-Tomás — FollowApp
-
----
-Este mensaje es parte del seguimiento de nuestra conversación en {lista_origen}.
-"""
+Tomás — FollowApp"""
 
     # Usar google_workspace.py para enviar
     result = subprocess.run(
@@ -144,7 +141,7 @@ def main():
 
             # Enviar email
             print(f"  Enviando email a {nombre} <{email}>...")
-            ok, stdout, stderr = enviar_email(email, nombre, lista_nombre)
+            ok, stdout, stderr = enviar_email(email, nombre)
             if ok:
                 print(f"    ✓ Email enviado")
                 total_enviados += 1
