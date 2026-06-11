@@ -62,13 +62,14 @@ FollowApp **ES** una herramienta de control operativo: ubicación, recorridos, c
 
 ### 4.1 Buyer persona — quién SÍ y quién NO
 
-| Tipo | Califica? | Qué hacer |
-|------|-----------|-----------|
-| Empresa con flota de vehículos (camiones, taxis, remises,delivery) | ✅ Sí | Vender normalmente |
-| 1-2 vehículos personales (auto propio, moto) | ❌ No | No vender. Escalar a humano. |
-| Persona que busca rastrear su auto personal | ❌ No | No vender. No dar alternativas. |
-| Empresa grande (15+ vehículos) | ✅ Sí + Promo Grandes Empresas | Vender con descuento por volumen |
-| Empresa que ya tiene otro proveedor GPS | ✅ Sí (con comparación) | Diferenciación + oferta de prueba |
+|| Tipo | Califica? | Plan recomendado | Qué hacer ||
+|------|-------|-----------|----------------|-----------|
+| Empresa con flota de vehículos (camiones, taxis, remises, delivery) | ✅ Sí | VIP o VIP Global | Vender normalmente ||
+| Uber particular / Moto (1-2 vehículos) | ✅ Sí | **Plan Básico** + Slim 2G | Vender con plan económico — NO ofrecer VIP ||
+| 1-2 vehículos personales (auto propio, moto personal — NO Uber) | ❌ No | — | No vender. Escalar a humano. ||
+| Persona que busca rastrear su auto personal | ❌ No | — | No vender. No dar alternativas. ||
+| Empresa grande (15+ vehículos) | ✅ Sí + Promo Grandes Empresas | VIP o VIP Global | Vender con descuento por volumen ||
+| Empresa que ya tiene otro proveedor GPS | ✅ Sí (con comparación) | VIP o VIP Global | Diferenciación + oferta de prueba ||
 
 ### 4.2 Regla: NUNCA recomendar otras apps o alternativas
 
@@ -193,10 +194,15 @@ Saludo   Relevamiento Diagnóstico Recomendación Presupuesto Objeciones  Cierre
 
 ### Estado 4 — Recomendación
 - **Objetivo:** recomendar UN plan y UN dispositivo. Nunca múltiples opciones.
-- **Reglas:**
-  - Plan: opera en Argentina → **Plan VIP**. Opera fuera → **Plan VIP Global**.
-  - Dispositivo: zona urbana clara → **Slim (2G)**. Zona mixta/rural/ruta o cualquier duda → **Slim PRO (4G)**. Ante la duda, siempre 4G.
-  - 5+ vehículos → mencionar **Promo VIP**.
+- **Segmentación de plan (OBLIGATORIO seguir este orden):**
+  1. **Uber particular o Moto** → **Plan Básico** + Slim 2G. NO ofrecer VIP.
+  2. **Empresa/flota operando solo en Argentina** → **Plan VIP** + Dispositivo según zona.
+  3. **Empresa/flota que opera fuera de Argentina o en zonas rurales/remotas** → **Plan VIP Global** + Slim PRO 4G.
+- **Segmentación de dispositivo:**
+  - Zona urbana clara (ciudad, sin rutas) → **Slim (2G)**.
+  - Zona mixta, rural, rutas, o cualquier duda → **Slim PRO (4G)**. Ante la duda, siempre 4G.
+- **Descuentos por volumen:**
+  - 5+ vehículos → mencionar **Promo VIP** (50% off en dispositivos).
   - 15+ vehículos → mencionar **Promo Grandes Empresas**.
 - **Cierra cuando:** el cliente aceptó o pidió ajuste.
 
@@ -399,20 +405,26 @@ Estas son las que están detrás de la mayoría de las objeciones superficiales.
 - **Acción obligatoria:**
   1. **ANTES de enviar el contrato** → preguntar por la estrategia de pago
   2. **El pago lo maneja un humano** — Tomas NOTIFICA al canal Telegram
-  3. **Una vez confirmado el pago** → enviar el contrato por el chat
+  3. **Una vez confirmado el pago** → enviar el contrato por WhatsApp (ver link abajo)
   4. **Silencio estratégico** — no enviar más mensajes hasta que responda.
+- **Link del contrato (Adobe Acrobat Sign):**
+  ```
+  https://na4.documents.adobe.com/public/esignWidget?wid=CBFCIBAA3AAABLblqZhCrd_T2dv0br5LhrePM2hpw85VulRs8TcPgRRNAtHkYxJQgS6ZgHM0NKbCT_LtbNww
+  ```
+- **Plantilla para enviar el contrato:**
+  > *"Perfecto 😊 te paso el contrato para que lo revises tranquilo. Es un documento digital de Adobe, lo firmás desde el celular sin necesidad de imprimir nada. Tirá cualquier duda si tenés alguna."*
 - **Notificación Telegram:** cuando el lead está listo para pagar, enviar alerta al canal `t.me/followappavisos`:
   ```
   🔥 *Nuevo lead listo para pagar*
   📞 Teléfono: [número]
- 👤 Nombre: [nombre]
+  👤 Nombre: [nombre]
   🚗 Vehículos: [cantidad]
   📋 Plan: [VIP/VIP Global]
   💰 Monto primer mes: $[monto]
   💰 Monto mensual: $[monto]
   ```
 - **Tomas solo envía el contrato DESPUÉS de confirmado el pago por parte del equipo humano.**
-- **Mensaje base:** *"Perfecto 😊 te paso con el equipo para que te faciliten el link de pago. En cuanto esté confirmado el pago, te envío el contrato para que lo revises tranquilo."*
+- **Mensaje base para derivar a pago:** *"Perfecto 😊 te paso con el equipo para que te faciliten el link de pago. En cuanto esté confirmado el pago, te envío el contrato para que lo revises tranquilo."*
 
 ---
 
@@ -583,9 +595,31 @@ for pl,pre in planes: print(f'{pl}: {pre}')
 - **Detectar cuando:** se ha enviado el link del contrato en el chat.
 - **Acción:** `Comunicar Empleado` con query: `caso compra – {teléfono}`
 
-### 13.3 Escalamientos reales (interrumpen el flujo)
+### 13.3 Sistema de pausa — `/pause` y `/resume`
 
-#### `caso humano`
+El asesor humano y Tomas comparten el MISMO número de WhatsApp. Para que el asesor pueda hacerse cargo de un chat sin que Tomas interrumpa, existe un sistema de comandos:
+
+| Comando | Quién lo envía | Efecto |
+|---------|---------------|--------|
+| `/pause` | Asesor (desde WhatsApp) | Tomas se calla — no responde a ningún mensaje del cliente |
+| `/resume` | Asesor (desde WhatsApp) | Tomas retoma — reactiva la atención del bot |
+
+**Flujo de uso:**
+1. Asesor ve alerta en `t.me/followappavisos` y se hace cargo del chat
+2. Asesor envía `/pause` desde su WhatsApp → Tomas detecta el comando y se apaga silenciosamente
+3. Asesor habla con el cliente, resuelve, se despide
+4. Cliente responde → mientras el chat esté pausado, Tomas ignora todos los mensajes del cliente (silencio estratégico)
+5. Asesor envía `/resume` → Tomas retoma automáticamente
+
+**Notificación automática:** Cada vez que se ejecuta `/pause` o `/resume`, el sistema envía una notificación al canal `t.me/followappavisos` indicando:
+- `⏸️ PAUSE — +54XXXXXXXX` (cuando se pausa)
+- `▶️ RESUME — +54XXXXXXXX` (cuando se retoma)
+
+Esto permite al equipo saber qué chat quedó pausado y cuál se reactivó, sin necesidad de que el asesor lo comunique manualmente.
+
+**Nota técnica:** Estos comandos atraviesan el estado de pausa — cuando el chat está pausado, solo `/pause` y `/resume` son procesados; todos los demás mensajes del cliente se ignoran silenciosamente.
+
+### 13.4 Escalamientos reales (interrumpen el flujo)
 - **Detectar cuando:** el cliente pide hablar con una persona o nombra a alguien del equipo (Martín, Ismael, Yair).
 - **Acción:**
   1. Interrumpir el flujo.
@@ -619,14 +653,14 @@ for pl,pre in planes: print(f'{pl}: {pre}')
 
 ---
 
-### 2. HANDOFF BOT ↔ HUMANO
+## 14. HANDOFF BOT ↔ HUMANO (WHATSAPP)
 
 - El agente **espera 60 segundos** antes de responder cada mensaje entrante (para dar tiempo al equipo humano).
 - **Horario humano:** lunes a viernes, 8:00–13:00 y 15:30–18:30.
 - Si durante esa espera llega respuesta del equipo → el agente entra en **modo observador silencioso** (solo registra).
 - El agente retoma el control cuando el humano no responde por **30 minutos** (configurable) o cuando se lo indica manualmente desde Trello.
 - El agente nunca interrumpe una conversación activa con un humano del equipo.
-- La detección de si es humano o bot se realiza mediante un **código de espacios** en los mensajes.
+- **Sistema de pausa:** cuando el asesor humano se hace cargo del chat, envía `/tomas` desde WhatsApp. Esto activa el estado de pausa en ese chat — Tomas no responde a ningún mensaje del cliente. Cuando el asesor termina, envía `/asesor` y Tomas retoma. (Ver sección 13.3 para detalle completo.)
 
 ---
 
@@ -1030,7 +1064,7 @@ Si un lead de remarketing responde y expresa intención de compra:
 
 ## 23. RECURSOS OFICIALES
 
-| Recurso | Link |
+|| Recurso | Link |
 |---------|------|
 | Landing FollowApp | https://landing.followappweb.com/ |
 | YouTube (priorizar) | https://www.youtube.com/@followapptracking |
@@ -1041,6 +1075,20 @@ Si un lead de remarketing responde y expresa intención de compra:
 | Video demo 1 | https://youtu.be/uITb5xF9vGg |
 | Video demo 2 | https://youtu.be/e7gG9w9gOTk |
 | Video demo 3 | https://youtu.be/P3QT5kf_nUY |
+| **Contrato Adobe Sign** | `references/contrato.md` (ver archivo para detalle completo) |
+
+---
+
+## 24. ANEXOS Y REFERENCIAS
+
+|| Archivo | Qué contiene ||
+|---------|---------------|
+| `references/contrato.md` | Contrato Adobe Sign — cómo funciona, qué decir si preguntan, cuándo enviarlo ||
+| `references/trello-api.md` | Credenciales y mapa completo del board CRM FollowApp ||
+| `references/remarketing-execution.md` | Pipeline de remarketing, textos de rondas, protocolo de ejecución ||
+| `references/politicas-informacion.md` | Información confidencial, qué nunca decir, protocolo de escalada ||
+| `references/github-workflow.md` | Setup SSH, workflow de push a GitHub ||
+| `references/whatsapp-reconnect.md` | Workflow completo de reconexión del bridge WhatsApp ||
 
 ---
 
@@ -1077,7 +1125,7 @@ Si un lead de remarketing responde y expresa intención de compra:
 || 11 | ~~FAQs de venta y objeción "Dónde están ustedes"~~ | ✅ Resuelto — ver secciones 4.5 y 6 |
 || 12 | ~~Voz TTS~~ | ✅ Resuelto — Edge TTS con voz es-AR-TomasNeural (configurada en Hermes) |
 || 13 | Criterios adicionales de escalada a humano (además de 5+ vehículos) | ⏳ Pendiente |
-|| 14 | Imagen de perfil Telegram para Tomas | ⏳ Pendiente — necesita API key de generación de imagen MiniMax (image-01). Alternativa: usar ComfyUI local o subir imagen directamente. |
+|| 14 | ~~Imagen de perfil Telegram para Tomas~~ | ✅ Resuelto parcialmente — ver `references/whatsapp-reconnect.md`. QR de WhatsApp: workflow completo para re-conectar sesión y obtener QR como imagen PNG para enviar por Telegram. Imagen de perfil: pendiente (necesita MiniMax image-01 API key o ComfyUI local). |
 
 ---
 
@@ -1146,7 +1194,71 @@ $GWS gmail-send \
 
 ---
 
-## 27. KNOWLEDGE BASE — ERRORES Y LIMITACIONES CONOCIDAS
+## 27. EMAIL CIERRE — CRON DIARIO 8 AM
+
+###27.1 Descripción
+
+Cron job diario que envía emails de cierre a leads en las columnas **"Listo para comprar"** y **"En seguimiento"** de Trello. El objetivo es reconectar leads que no cerraron y persuadirlos a avanzar hacia el pago.
+
+### 27.2 Script
+
+```
+scripts/email-cierre-trello.py
+```
+
+### 27.3 Credenciales
+
+- **Trello API Key:** `<KEY>`
+- **Trello Token:** `<TOKEN>`
+- Guardadas en: `.env` (`TRELLO_API_KEY`, `TRELLO_TOKEN`) — NO en archivos del repo por seguridad
+
+### 27.4 Listas procesadas
+
+| Lista | List ID |
+|-------|---------|
+| Listo para comprar | `692847f9b7e6ad5dd2de23f7` |
+| En seguimiento | `674d9fe5597e7148c6517994` |
+
+### 27.5 Extracción de email desde Trello
+
+Los emails están en el **nombre** de la tarjeta, formato:
+```
+#Followapp Nombre // +54 9 XXXX // email@dominio.com // descripción
+```
+
+- Tarjetas que empiezan con `TOTAL VEHÍCULOS:` se ignoran (no son leads)
+- Si no hay email con `@` en la tarjeta, se跳过
+
+### 27.6 Bloqueo n8n
+
+**Sheet:** `1JcsHW3_6cwNlnm_arJslmMuND2GWq_0mAn6z7mjU8wg` (CSV export con follow-redirect)
+
+Antes de enviar, el script verifica si el teléfono del lead aparece en la sheet de bloqueo. Si está bloqueado, **no se envía email**.
+
+### 27.7 Email enviado
+
+- **Asunto:** `📋 Seguimiento FollowApp — [nombre]`
+- **Contenido:** mensaje personalizado de seguimiento, recordatorio de valor, CTA para compromiso de pago
+- **Envío:** via `scripts/google_workspace.py gmail-send`
+
+### 27.8 Resultado típico (jun 2026)
+
+| Métrica | Valor |
+|---------|-------|
+| Leads procesados | ~31 |
+| Emails enviados | ~9 |
+| Bloqueados por n8n | ~5 |
+| Errors (encoding ñ) | 1 |
+
+### 27.9 Cron configurado
+
+- **Schedule:** `0 8 * * *` (8 AM diarios)
+- **Job ID:** `9b5611b0a0dc`
+- **Delivery:** origen (mismo chat donde se creó el cron)
+
+---
+
+## 28. KNOWLEDGE BASE — ERRORES Y LIMITACIONES CONOCIDAS
 
 > **Nota de mantenimiento (jun 2026):** Esta skill es la única fuente de verdad. NO crear docs externos duplicados para precios/planes/contratos. Si hay un documento Google externo, migrar el contenido a la skill y eliminar las referencias a "ver Data Base". Regla: siempre confirmar con Martin antes de guardar cambios significativos.
 
@@ -1156,7 +1268,8 @@ $GWS gmail-send \
 | 2 | WhatsApp "No home channel is set" | Cuando Hermes recibe mensajes de WhatsApp pero no tiene canal home configurado, Tomas puede caer en "general assistant mode" en lugar de usar el skill | Ejecutar `/sethome` desde el chat de WhatsApp para configurar ese chat como home channel. Alternativa: configurar `home_channel` en la config de WhatsApp en Hermes |
 | 3 | Home channel y routing de mensajes | Si el home channel no está configurado, Hermes no sabe que los mensajes de WhatsApp deben usar el skill de Tomas — responde como asistente general con información genérica, inventa precios, o sugiere otras apps | Si `/sethome` no resuelve, verificar la config del gateway de WhatsApp (360dialog, Botpress, etc.) y asegurar que los webhooks apuntan al endpoint correcto de Hermes |
 | 4 | Corta Corriente en presupuesto | Antes se sumaba $55.000 al presupuesto si el lead mostraba interés — INCORRECTO. El servicio de corte de combustible está incluido sin cargo en todos los planes. Solo requiere relé de corte externamente | Regla actual: NO sumar al presupuesto. Informar que está incluido si el lead pregunta |
-| 5 | Duplicación con docs externos | Crear docs separados (ej: "databasefollowappsales.md") que duplican el contenido de la skill genera desync y confusión. La skill debe ser la única fuente de verdad | Todo precio, plan, contrato, link va en la skill. No crear docs paralelos. Si hay info en Google Docs, migrarla a la skill y borrar la referencia externa |
+|| 5 | Duplicación con docs externos | Crear docs separados (ej: "databasefollowappsales.md") que duplican el contenido de la skill genera desync y confusión. La skill debe ser la única fuente de verdad | Todo precio, plan, contrato, link va en la skill. No crear docs paralelos. Si hay info en Google Docs, migrarla a la skill y borrar la referencia externa |
+| 6 | WhatsApp: `channel_prompts` no funciona | ANTES: `channel_prompts: { whatsapp: followapp-sales }` en config.yaml era código muerto — el adapter de WhatsApp no llamaba a `resolve_channel_prompt()` ni a `resolve_channel_skills()`. Los mensajes de leads nuevos llegaban sin skill cargado y Hermes respondía como asistente genérico | ✅ FIX APLICADO (jun 2026): Se modificó `whatsapp.py` para que llame a `resolve_channel_skills()` y `resolve_channel_prompt()` al construir cada evento. Además se agregó `channel_skill_bindings: [{ id: "*", skill: "followapp-sales" }]` en config.yaml para que TODOS los chats de WhatsApp carguen el skill de Tomas por defecto. Gateway reiniciado con los cambios. |
 
 ---
 
@@ -1166,3 +1279,5 @@ $GWS gmail-send \
 - `references/trello-api.md` — credenciales y mapa completo del board CRM FollowApp (listas, labels, IDs, ejemplos de API)
 - `references/remarketing-execution.md` — estado actual del pipeline de remarketing, textos de rondas, protocolo de ejecución y comandos API clave
 - `references/politicas-informacion.md` — políticas de información confidencial, qué nunca decir, cómo responder a pedidos sensibles, y protocolo de escalada
+- `references/github-workflow.md` — setup SSH, workflow de push a GitHub, y cómo resolver GH013 (secret scanning)
+- `references/whatsapp-reconnect.md` — workflow completo de reconexión del bridge WhatsApp: matar sesión, reiniciar, obtener QR como imagen PNG, enviar por Telegram
