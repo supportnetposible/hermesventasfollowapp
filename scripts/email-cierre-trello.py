@@ -117,10 +117,8 @@ Este mensaje es parte del seguimiento de nuestra conversación en {lista_origen}
 def main():
     print("[Email Cierre] Iniciando...")
 
-    # 1. Obtener phones bloqueados
-    print("[Email Cierre] Verificando bloqueo n8n...")
-    blocked = get_blocked_phones()
-    print(f"  → {len(blocked)} números bloqueados")
+    # 1. Procesar cada lista (sin filtro n8n — la sheet de bloqueo era solo para /pause)
+    # Los bloqueados por n8n se filtran solo en el chat en vivo, no en emails programados
 
     total_enviados = 0
     total_bloqueados = 0
@@ -143,12 +141,6 @@ def main():
             nombre = parsed["nombre"]
             telefono = parsed["telefono"]
             email = parsed["email"]
-
-            # Filtrar bloqueados
-            if telefono in blocked:
-                print(f"  [BLOQUEADO] {nombre} ({telefono})")
-                total_bloqueados += 1
-                continue
 
             # Enviar email
             print(f"  Enviando email a {nombre} <{email}>...")
